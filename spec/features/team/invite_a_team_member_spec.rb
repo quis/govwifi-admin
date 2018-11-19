@@ -18,6 +18,7 @@ describe "Invite a team member" do
 
   context "when logged in" do
     let(:user) { create(:user, :confirmed) }
+    let(:invited_user_email) { User.find_by(email: 'invited_same_org@gov.uk') }
     before do
       sign_in_user user
       visit root_path
@@ -27,6 +28,21 @@ describe "Invite a team member" do
 
     it "shows the invites page" do
       expect(page).to have_content("Invite a team member")
+    end
+
+    it "defaults permissions tick boxes to unticked" do
+      expect(page).to have_content("Manage team")
+      expect(page).to have_content("Manage locations")
+    end
+
+    it "allows the user to select on invite the permissions of a user" do
+      fill_in "Email", with: invited_user_email
+      check 'manageTickTeamBox'
+      check 'manageLocationsTickBox'
+      click_on "Send invitation email"
+
+      expect(invited_user_email.edit_manage_team_permission).to eq(false)
+      expect(invited_user_email.edit_manage_locations_permissons).to eq(false)
     end
 
     context "when entering a team members email address" do
@@ -49,11 +65,7 @@ describe "Invite a team member" do
           expect(invited_user.confirmed?).to eq(false)
           expect(invited_user.organisation).to eq(user.organisation)
         end
-
-        it "sets the permissions all to unticked on invite" do
-
-        end
-      end
+    end
 
       context "with non gov.uk email address" do
         let(:invited_user_email) { "incorrect@gmail.com" }

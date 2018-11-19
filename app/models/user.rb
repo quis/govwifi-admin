@@ -31,6 +31,20 @@ class User < ApplicationRecord
     invitation_sent_at && !invitation_accepted?
   end
 
+  def edit_manage_team_permission
+    # Permission.update(
+    #   user: self,
+    #   can_manage_team: true,
+    # )
+  end
+
+  def edit_manage_locations_permissons
+    # Permission.update(
+    #   user: self,
+    #   can_manage_locations: true
+    # )
+  end
+
 private
 
   def create_default_permissions
