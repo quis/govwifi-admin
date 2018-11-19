@@ -26,8 +26,30 @@
           <div class="govuk-hint">Must be a valid government email address</div>
           <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "govuk-input" %>
         </div>
-
         <div class="actions">
+          <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              </legend>
+              <span id="waste-hint" class="govuk-hint">
+                Select permissions.
+              </span>
+              <div class="govuk-checkboxes">
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" type="checkbox">
+                  <label class="govuk-label govuk-checkboxes__label">
+                    Manage team
+                  </label>
+                </div>
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input"  type="checkbox">
+                  <label class="govuk-label govuk-checkboxes__label">
+                    Manage locations
+                  </label>
+                </div>
+              </div>
+            </fieldset>
+          </div>
           <%= f.submit "Send invitation email", class: "govuk-button govuk-!-margin-top-4" %>
         </div>
       <% end %>

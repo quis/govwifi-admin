@@ -49,6 +49,10 @@ describe "Invite a team member" do
           expect(invited_user.confirmed?).to eq(false)
           expect(invited_user.organisation).to eq(user.organisation)
         end
+
+        it "sets the permissions all to unticked on invite" do
+
+        end
       end
 
       context "with non gov.uk email address" do
