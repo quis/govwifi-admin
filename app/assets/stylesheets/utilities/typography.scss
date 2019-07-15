@@ -5,3 +5,36 @@
 .text-red {
   color: $govuk-error-colour;
 }
+
+.ip-chunk {
+  display: inline-block;
+  text-align: left;
+  position: relative;
+  letter-spacing: 0.04em;
+
+  .ip-chunk-chunk {
+    float:left;
+    display:inline-block;
+  }
+
+  .ip-chunk-sep {
+    display:inline-block;
+    color: $colour-light-grey;
+    text-align: center;
+    width: 0.4em;
+    position: relative;
+    top: -0.1em;
+  }
+}
+
+.ip-chunk-c {
+  text-align: center;
+}
+
+.ip-chunk-r {
+  text-align: right;
+}
+
+.govuk-table__cell--numeric {
+  text-align: left;
+}

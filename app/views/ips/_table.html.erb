@@ -3,16 +3,15 @@
     <div class="filter-by">
       <%= location.full_address %>
     </div>
-    <div class="govuk-body govuk-!-margin-bottom-2">
+    <div class="govuk-body govuk-!-margin-bottom-5">
       RADIUS secret key:
       <div class="inline-block">
-        <%= location.radius_secret_key %>
+        <%= location.radius_secret_key %>&ensp;<%= link_to 'Rotate', location_rotate_key_path(location, rotate: true), class: "red-link" %>
       </div>
     </div>
     <% if current_user.can_manage_locations?(current_organisation) %>
-      <%= link_to 'Rotate secret key', location_rotate_key_path(location, rotate: true), class: "govuk-button red-button" %>
       <p class="govuk-body govuk-!-margin-bottom-1">
-        <%= link_to "Add IP to this location", new_ip_path(location: location), class: "govuk-link" %>
+        <%= link_to "Add IP to this location", new_ip_path(location: location), class: "govuk-button govuk-button--secondary" %>
       </p>
     <% end %>
 
@@ -26,20 +25,23 @@
   <tbody class="govuk-table__body" id="ips-table">
     <% location.ips.each do |ip| %>
       <tr class="govuk-table__row" id="ips-row-<%= ip.id %>">
-        <td class="govuk-table__cell govuk-!-width-one-quarter"><%= ip.address %></td>
+        <td class="govuk-table__cell govuk-!-width-one-third govuk-table__cell--numeric">
+<span class="ip-chunk"><span class="ip-chunk-chunk"><%= ip.address.split('.')[0] %></span><span class="ip-chunk-sep">.</span></span><span class="ip-chunk"><span class="ip-chunk-chunk"><%= ip.address.split('.')[1] %></span><span class="ip-chunk-sep">.</span></span><span class="ip-chunk"><span class="ip-chunk-chunk"><%= ip.address.split('.')[2] %></span><span class="ip-chunk-sep">.</span></span><span class="ip-chunk "><span class="ip-chunk-chunk"><%= ip.address.split('.')[3] %></span><span class="ip-chunk-sep">&nbsp;</span></span>
+        </td>
         <% if ip.available? %>
-          <td class="govuk-table__cell govuk-!-width-one-quarter">Available</td>
-        <% else %>
-          <td class="govuk-table__cell govuk-!-width-one-quarter text-red">Not available until 6am tomorrow
-          </td>
-        <% end %>
-        <td class="govuk-table__cell govuk-!-width-one-quarter text-red">
+          <td class="govuk-table__cell govuk-!-width-one-third text-light-grey">
           <% if ip.unused? %>
             No traffic received yet
           <% elsif ip.inactive? %>
             No traffic for the last 10 days
+          <% else %>
+            Receiving traffic
           <% end %>
-        </td>
+          </td>
+        <% else %>
+          <td class="govuk-table__cell govuk-!-width-one-half text-light-grey">Available at 6am tomorrow
+          </td>
+        <% end %>
         <td class="govuk-table__cell text-right">
           <% if current_user.can_manage_locations?(current_organisation) %>
             <%= link_to 'Remove', ip_remove_path(ip), class: "govuk-link" %>

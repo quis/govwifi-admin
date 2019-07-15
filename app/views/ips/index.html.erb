@@ -1,37 +1,52 @@
 <div id='wrapper'>
   <div class="govuk-grid-row">
-    <%= render "confirm_remove_ip" if @ip_to_delete && current_user.can_manage_locations?(current_organisation) %>
-    <%= render "confirm_remove_location" if @location_to_delete && current_user.can_manage_locations?(current_organisation) %>
-    <%= render "confirm_rotate_radius_key" if @key_to_rotate && current_user.can_manage_locations?(current_organisation) %>
-
-    <div class="govuk-grid-column-two-thirds">
-      <input type="search" id="filter-input" placeholder="Search by location or postcode" class="govuk-input">
-      <h1 class="govuk-heading-l  govuk-!-padding-top-5">IP addresses</h1>
+    <div class="govuk-grid-column-one-quarter">
+      <%= link_to 'Locations', ips_path, id: 'nav-ips', class: 'govuk-link' %>
+      <br>
+      <%= link_to 'Team', memberships_path, class: 'govuk-link' %>
+      <br>
+      <% if current_organisation&.ips&.empty? %>
+        <%= link_to 'Setup', new_organisation_setup_instructions_path, class: 'govuk-link' %>
+      <% else %>
+        <%= link_to 'Setup', setup_instructions_path, class: 'govuk-link' %>
+      <% end %>
+      <br>
+      <%= link_to 'Logs', new_logs_search_path, class: 'govuk-link' %>
     </div>
-    <div class="govuk-grid-column-one-third text-right">
-      <% if current_user.can_manage_locations?(current_organisation) %>
-        <% if current_organisation.locations.empty? %>
-          <%= link_to 'Add IP address', new_location_path, class: "govuk-button" %>
-        <% else %>
-          <%= link_to 'Add IP address', new_ip_path, class: "govuk-button" %>
+    <div class="govuk-grid-column-three-quarters">
+      <div class="govuk-grid-row">
+        <%= render "confirm_remove_ip" if @ip_to_delete && current_user.can_manage_locations?(current_organisation) %>
+        <%= render "confirm_remove_location" if @location_to_delete && current_user.can_manage_locations?(current_organisation) %>
+        <%= render "confirm_rotate_radius_key" if @key_to_rotate && current_user.can_manage_locations?(current_organisation) %>
+
+        <div class="govuk-grid-column-two-thirds">
+          <h1 class="govuk-heading-l  govuk-!-padding-top-5">Locations</h1>
+        </div>
+        <div class="govuk-grid-column-one-third text-right">
+          <% if current_user.can_manage_locations?(current_organisation) %>
+            <%= link_to 'Add a location', new_location_path, class: "govuk-button" %>
+          <% end %>
+        </div>
+        <div class="govuk-grid-column-full govuk-!-margin-bottom-6">
+          <input type="search" id="filter-input" placeholder="Search by location or postcode" class="govuk-input">
+        </div>
+      </div>
+
+      <% if current_organisation.locations.empty? %>
+        <p class="govuk-body">
+          You need to add the IPs of your authenticator(s).
+        </p>
+        <p class="govuk-body">If your authenticators are allocated IPs dynamically, you can use Firewall NAT rules, so that your requests come from consistent IPs.</p>
+
+      <% else %>
+        <p class="govuk-body" id="no-results" style="display: none">
+          <strong>No results found</strong>
+        </p>
+        <% @locations.each do |location| %>
+          <%= render "ips/table", location: location %>
         <% end %>
       <% end %>
     </div>
   </div>
-
-  <% if current_organisation.locations.empty? %>
-    <p class="govuk-body">
-      You need to add the IPs of your authenticator(s).
-    </p>
-    <p class="govuk-body">If your authenticators are allocated IPs dynamically, you can use Firewall NAT rules, so that your requests come from consistent IPs.</p>
-
-  <% else %>
-    <p class="govuk-body" id="no-results" style="display: none">
-      <strong>No results found</strong>
-    </p>
-    <% @locations.each do |location| %>
-      <%= render "ips/table", location: location %>
-    <% end %>
-  <% end %>
 </div>
 <%= render "shared/filter_search" %>
