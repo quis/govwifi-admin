@@ -19,11 +19,12 @@
 
   .ip-chunk-sep {
     display:inline-block;
-    color: $colour-light-grey;
+    color: $govuk-secondary-text-colour;
     text-align: center;
     width: 0.4em;
     position: relative;
-    top: -0.1em;
+    top: -0.05em;
+    font-weight: bold;
   }
 }
 
